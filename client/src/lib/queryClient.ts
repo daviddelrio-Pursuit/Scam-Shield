@@ -12,7 +12,11 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
-  const res = await fetch(url, {
+  // Allow an optional Vite-provided API base URL (set VITE_API_BASE in Netlify or env)
+  const API_BASE = (import.meta as any)?.env?.VITE_API_BASE ?? '';
+  const fullUrl = url.startsWith('http') ? url : `${API_BASE}${url}`;
+
+  const res = await fetch(fullUrl, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
     body: data ? JSON.stringify(data) : undefined,
@@ -29,7 +33,11 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey.join("/") as string, {
+    const API_BASE = (import.meta as any)?.env?.VITE_API_BASE ?? '';
+    const url = queryKey.join("/") as string;
+    const fullUrl = url.startsWith('http') ? url : `${API_BASE}${url}`;
+
+    const res = await fetch(fullUrl, {
       credentials: "include",
     });
 
