@@ -61,11 +61,37 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
+  // Some platforms (macOS, certain Node builds) may not support SO_REUSEPORT
+  // and will throw ENOTSUP when reusePort: true is passed. Only enable on
+  // Linux where it's commonly supported, and provide a fallback retry
+  // without reusePort if we see ENOTSUP.
+  const listenOptions: any = { port, host: "0.0.0.0" };
+  if (process.platform === "linux") {
+    listenOptions.reusePort = true;
+  }
+
+  // Attach an error handler to detect ENOTSUP and retry without reusePort.
+  const onError = (err: any) => {
+    if (err && err.code === 'ENOTSUP') {
+      log(`listen reusePort unsupported, retrying without reusePort: ${err.message}`);
+      try {
+        server.listen({ port, host: "0.0.0.0" }, () => {
+          log(`serving on port ${port} (fallback)`);
+        });
+      } catch (e) {
+        // If retry also fails, rethrow the original error for visibility.
+        throw err;
+      }
+    } else {
+      throw err;
+    }
+  };
+
+  server.once('error', onError);
+
+  server.listen(listenOptions, () => {
+    // remove our one-time error handler once listening succeeds
+    server.removeListener('error', onError);
     log(`serving on port ${port}`);
   });
 })();
