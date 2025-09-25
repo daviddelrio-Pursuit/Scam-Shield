@@ -5,6 +5,6 @@
 # Redirect /api calls to an external API host. Replace with your API origin.
 [[redirects]]
   from = "/api/*"
-  to = "https://api.ddrscamshield.netlify.app/:splat"
+  to = "https://ddrscamshield.netlify.app/:splat"
   status = 200
   force = true
