@@ -1,0 +1,85 @@
+# Node.js
+node_modules
+npm-debug.log*
+.npm
+
+# Build outputs
+dist
+build
+
+# Development files
+.env.local
+.env.development
+.env.test
+
+# Version control
+.git
+.gitignore
+.github
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage
+.nyc_output
+
+# ESLint cache
+.eslintcache
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Temporary folders
+tmp/
+temp/
+
+# Documentation
+README.md
+docs/
+
+# Replit specific files
+.replit
+replit.nix
+replit.md
+
+# Netlify specific files
+netlify.toml
+
+# Docker
+Dockerfile
+.dockerignore
