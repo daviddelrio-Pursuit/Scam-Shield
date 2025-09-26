@@ -57,10 +57,10 @@ app.use((req, res, next) => {
   }
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
+  // Default to 3000 for development, 5000 for production to avoid macOS conflicts
   // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || '5000', 10);
+  const defaultPort = process.env.NODE_ENV === 'production' ? '5000' : '3000';
+  const port = parseInt(process.env.PORT || defaultPort, 10);
   // Some platforms (macOS, certain Node builds) may not support SO_REUSEPORT
   // and will throw ENOTSUP when reusePort: true is passed. Only enable on
   // Linux where it's commonly supported, and provide a fallback retry

@@ -30,7 +30,7 @@ RUN addgroup -g 1001 -S nodejs && \
 RUN chown -R nodejs:nodejs /app
 USER nodejs
 
-# Expose port
+# Expose port (5000 for production)
 EXPOSE 5000
 
 # Health check - check if the server is responding
