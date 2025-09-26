@@ -30,6 +30,9 @@ RUN addgroup -g 1001 -S nodejs && \
 RUN chown -R nodejs:nodejs /app
 USER nodejs
 
+# Set production environment
+ENV NODE_ENV=production
+
 # Expose port (5000 for production)
 EXPOSE 5000
 

@@ -47,10 +47,14 @@ app.use((req, res, next) => {
     throw err;
   });
 
+  // Get environment once and use consistently
+  const nodeEnv = process.env.NODE_ENV || 'development';
+  const isProduction = nodeEnv === 'production';
+
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
+  if (!isProduction) {
     await setupVite(app, server);
   } else {
     serveStatic(app);
@@ -59,7 +63,7 @@ app.use((req, res, next) => {
   // ALWAYS serve the app on the port specified in the environment variable PORT
   // Default to 3000 for development, 5000 for production to avoid macOS conflicts
   // this serves both the API and the client.
-  const defaultPort = process.env.NODE_ENV === 'production' ? '5000' : '3000';
+  const defaultPort = isProduction ? '5000' : '3000';
   const port = parseInt(process.env.PORT || defaultPort, 10);
   // Some platforms (macOS, certain Node builds) may not support SO_REUSEPORT
   // and will throw ENOTSUP when reusePort: true is passed. Only enable on
